@@ -1,27 +1,5 @@
-    //Creating Elements
-  
 
-    // multiple replaces at a time from a string using regex
-    // String.prototype.replaceArray = function(find, replace) {
-    // 	var replaceString = this;
-    // 	var regex; 
-    // 	for (var i = 0; i < find.length; i++) {
-    // 		regex = new RegExp(find[i], "g");
-    // 		replaceString = replaceString.replace(regex, replace[i]);
-    // 	}
-    // 	return replaceString;
-    // };
-
-    // console.log('hello 54645655656565656566556');
-    // var replaces=["So road trip\\?","nllm"];
-    // var replacedWith=[];
-    // var i;
-    // for (var i = 0; i < replaces.length; i++) {
-    // 	replacedWith.push("");
-    // }
-
-
-
+//Removes elements from array by value
 function removeA(arr) {
     var what, a = arguments, L = a.length, ax;
     while (L > 1 && arr.length) {
@@ -33,44 +11,39 @@ function removeA(arr) {
     return arr;
 }
 
-// function nodeInsertedCallback(event) { console.log('ollallaalalal'); }
-// document.addEventListener('DOMNodeInserted', nodeInsertedCallback);
+var spamWordsArr=[];    //contains all the spam words
 
-var spamWordsArr=[];
 chrome.storage.sync.get("blockkk", function (obj) {
-    console.log(obj);
     spamWordsArr=obj.blockkk;
-    console.log('spamWordsArr: ',spamWordsArr);
+    console.log('Blocked Comments: ',spamWordsArr);
     
-    if (typeof spamWordsArr==='undefined') {
-        console.log('loll');
+    if (typeof spamWordsArr==='undefined') {  // This occurs when the extension is first used as nothing would be stored 
         spamWordsArr=[];
     };
+
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
             console.log(sender.tab ?
                     "from a content script:" + sender.tab.url :
                     "from the extension");
 
-            if (request.greeting == "helloNewSpamWord")
+            if (request.greeting == "helloNewSpamWord") // adding new spam word to list
             {
-                console.log(request.spam);
                 spamWordsArr.push(request.spam);
                 chrome.storage.sync.set({'blockkk': spamWordsArr}, function() {
-                    console.log('saved');          
+                    console.log('blocked ',request.spam);          
                 });
                 sendResponse(spamWordsArr);
             }
-            if (request.greeting == "needMyData")
+            if (request.greeting == "needMyData")  // Called when popUp is opened, send the list to display in the frontend.
             {
                 sendResponse(spamWordsArr);
             }
-            if (request.greeting == "unBlockThisWord")
+            if (request.greeting == "unBlockThisWord")  // Removing the given comment from the list of blocked comments
             {
-                console.log(request.spam);
                 removeA(spamWordsArr, request.spam);
                 chrome.storage.sync.set({'blockkk': spamWordsArr}, function() {
-                    console.log('removed');          
+                    console.log('removed from block list: ',request.spam);          
                 });
                 sendResponse(spamWordsArr);
             }
@@ -84,19 +57,21 @@ chrome.storage.sync.get("blockkk", function (obj) {
 
         spamWordsArr.forEach( function(spamWord) { 
             var variableReg=new RegExp(spamWord);
+
+            //
             var commonReg = /\<div class="clearfix" data-reactid="((?:(?!\>).)*?)"\>(?:(?!\<div class="clearfix").)*/g;
             var myRegexp=new RegExp(commonReg.source+variableReg.source);
-            console.log(myRegexp);
+            // console.log(myRegexp);
             var match = myRegexp.exec(document.body.innerHTML);
             if (match) {
-                console.log(match[1]);
+                // console.log(match[1]);
                 var rr=document.querySelectorAll("[data-reactid='"+match[1]+"']");
                 rr[0].parentNode.removeChild(rr[0]);
             }
         });
 
 
-            // Adding a button in the top similar to Home Srinath
+            // Adding a button to the first comment... not needed right now...
             var Loll={
                 list: null,
                 link: null
@@ -125,19 +100,24 @@ chrome.storage.sync.get("blockkk", function (obj) {
     $(document).bind('DOMNodeInserted', function(event) {
         // A new node was inserted into the DOM
         // event.target is a reference to the newly inserted node
-        spamWordsArr.forEach( function(spamWord) { 
+        spamWordsArr.forEach( function(spamWord) {
+
+        //finding out where the comment is present in the html and trying to catch every thing starting from its main parent div 
+        // so that ill get its data-reactid which is unique so that I can remove it
             var variableReg=new RegExp(spamWord);
             var commonReg = /\<div class="clearfix" data-reactid="((?:(?!\>).)*?)"\>(?:(?!\<div class="clearfix").)*/g;
             var myRegexp=new RegExp(commonReg.source+variableReg.source);
             var match = myRegexp.exec(event.target.innerHTML);
             // console.log("loll");
             if (match) {
-                console.log(match[1]);
+                // console.log(match[1]);
 
                 var rr1=event.target.querySelectorAll("[data-reactid='"+match[1]+"']");
                 rr1[0].parentNode.removeChild(rr1[0]);
             }
         });
+
+        //adding a function to all the 'x' buttons to the right of any comment
          var closeB=document.getElementsByClassName('UFICommentCloseButton _50zy _50-0 _50z- _5upp _42ft');
             var printObj;
             for(var i=0;i<closeB.length;i++){
@@ -158,10 +138,14 @@ chrome.storage.sync.get("blockkk", function (obj) {
 var spamIt=function(nod) {
     console.log('blah');
     var r = confirm("Do you want to block this comment completely...?");
+    // I fell the most awesome thing is this.. ^_^ . Starting from the button whose onclick event is called
+    // travesered through the DOM to get the text of the comment to add it block list
     if (r == true) {
         console.log('yes');
-        var strr=nod.parentNode.firstChild.lastChild.previousSibling.firstChild.firstChild.innerHTML;
-        console.log(escapeRegExp(strr));
+        var strr=nod.parentNode.firstChild.lastChild.previousSibling.firstChild.firstChild.innerText;
+        
+        // console.log(strr);
+        // console.log(escapeRegExp(strr));
         spamWordsArr.push(escapeRegExp(strr));
         chrome.storage.sync.set({'blockkk': spamWordsArr}, function() {
             console.log('saved');          
@@ -170,6 +154,8 @@ var spamIt=function(nod) {
         console.log('no');
     }
 };
+
+//http://stackoverflow.com/a/6969486/2466168
 function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }

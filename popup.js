@@ -1,4 +1,4 @@
-    var wrods=[];
+    //http://stackoverflow.com/a/6969486/2466168
     function escapeRegExp(str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
@@ -21,8 +21,9 @@
                         .addClass('ui-menu-item')
                         .attr('role', 'menuitem')
                         .appendTo(cList);
-                    var aaa = $('<a/>')
+                    var aaa = $('<span/>')
                         .addClass('ui-all')
+                        .css('text-decoration', 'none !important')
                         .text(countries[i])
                         .appendTo(li);
                     var deleteB = $('<a/>')
@@ -70,9 +71,10 @@
                         .addClass('ui-menu-item')
                         .attr('role', 'menuitem')
                         .appendTo(cList);
-                    var aaa = $('<a/>')
+                    var aaa = $('<span/>')
                         .addClass('ui-all')
                         .text(countries[i])
+                        .css('text-decoration', 'none !important')
                         .appendTo(li);
                     var deleteB = $('<a/>')
                         // .addClass('close')
@@ -108,9 +110,10 @@
                         .addClass('ui-menu-item')
                         .attr('role', 'menuitem')
                         .appendTo(cList);
-                    var aaa = $('<a/>')
+                    var aaa = $('<span/>')
                         .addClass('ui-all')
                         .text(countries[i])
+                        .css('text-decoration', 'none !important')
                         .appendTo(li);
                     var deleteB = $('<a/>')
                         // .addClass('close')

@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "Comment Blocker Facebook",
-  "description": "This extension helps in removing unwanted comments from the facebook page instantly.",
-  "version": "1.0",
+  "description": "Helps in removing unwanted comments from the facebook page instantly.",
+  "version": "1.0.0.1",
   "icons": {
       "19": "icon19.png"
   },
