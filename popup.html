@@ -1,0 +1,55 @@
+<!doctype html>
+<html ng-app="" ng-csp>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+    <style>
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     -->
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script src="popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="popup.css">
+
+  </head>
+  <body class="mainBg col-md-12" >
+    <center>
+        <h3>FB Comment Blocker</h3>
+    </center>
+    <hr>
+    <form class="form-horizontal" role="form">
+      <div class="form-group col-md-6">
+        <textarea class="form-control" rows="3" id="search" placeholder="Enter the comment to be removed"></textarea>
+      </div>
+    
+     
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <!-- <input type="button" id="button" value="Search" /> -->
+          <button type="button" id="button"  class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </form>
+   <h4>Blocked Comments</h4>
+    <ul class="mylist"></ul>
+  </body>
+</html>
+

@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+
+  "name": "Comment Blocker Facebook",
+  "description": "This extension helps in removing unwanted comments from the facebook page instantly.",
+  "version": "1.0",
+  "icons": {
+      "19": "icon19.png"
+  },
+  "permissions": [
+        "cookies",
+        "tabs",
+        "storage",
+        "webRequest"
+    ],
+  "background": {
+        "persistent": true,
+        "scripts": ["background.js"],
+        "background_page":"background.html"
+    },
+  "content_scripts": [
+    {
+      "matches": ["http://www.facebook.com/*","https://www.facebook.com/*"],
+      "run_at": "document_start",
+      "js": ["jquery-1.11.1.min.js","myscript.js"]
+    }
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon19.png"
+  }
+}
+
